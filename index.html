@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CICF Pro — Client Project Dashboard</title>
+  <meta name="description" content="CICF Pro — A premium consultancy dashboard to track, manage and deliver client web projects. Monitor statuses, timelines, team members, and analytics." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="styles/main.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%230a0a0a'/><text y='72' x='18' font-size='68' font-weight='800' fill='white' font-family='system-ui'>C</text></svg>" />
+</head>
+<body>
+
+<!-- ════════════════════════════════════════
+     LOGIN PAGE
+════════════════════════════════════════ -->
+<div id="login-page">
+  <div class="login-container">
+
+    <!-- Left brand panel -->
+    <div class="login-left">
+      <div class="login-brand-row">
+        <div class="login-brand-mark">C</div>
+        <div class="login-brand-name">CICF<em>Pro</em></div>
+      </div>
+      <div class="login-hero-text">
+        <h2>Your project<br>command <em>centre.</em></h2>
+        <p>Track, manage, and deliver client projects with complete visibility — from kickoff to launch, all in one workspace.</p>
+      </div>
+      <div class="login-pills">
+        <div class="login-pill"><div class="lp-num">8</div><div class="lp-lbl">Projects</div></div>
+        <div class="login-pill"><div class="lp-num">6</div><div class="lp-lbl">Clients</div></div>
+        <div class="login-pill"><div class="lp-num">24</div><div class="lp-lbl">Team Members</div></div>
+      </div>
+    </div>
+
+    <!-- Right form panel -->
+    <div class="login-right">
+      <h3>Welcome back</h3>
+      <p class="login-sub">Sign in to access your dashboard</p>
+      <form id="login-form" novalidate>
+        <div class="field">
+          <label for="email">Email address</label>
+          <div class="input-wrap">
+            <span class="input-icon">✉</span>
+            <input type="email" id="email" name="email" placeholder="you@cicf.io" autocomplete="email" required />
+          </div>
+        </div>
+        <div class="field">
+          <label for="password">Password</label>
+          <div class="input-wrap">
+            <span class="input-icon">⬡</span>
+            <input type="password" id="password" name="password" placeholder="••••••••" autocomplete="current-password" required />
+          </div>
+        </div>
+        <div class="hint-box">
+          Demo — <strong>Email:</strong> admin@cicf.io &nbsp;|&nbsp; <strong>Password:</strong> cicf2026
+        </div>
+        <button type="submit" class="btn-primary" id="login-btn">
+          Sign in to Dashboard
+          <span class="btn-shimmer"></span>
+        </button>
+        <p class="login-error" id="login-error" role="alert"></p>
+      </form>
+    </div>
+
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════
+     APP SHELL
+════════════════════════════════════════ -->
+<div id="app-shell">
+
+  <!-- Mobile sidebar overlay -->
+  <div id="sidebar-overlay" class="sidebar-overlay"></div>
+
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <!-- Rendered by JS -->
+    <div id="sidebar-inner"></div>
+  </aside>
+
+  <!-- Main -->
+  <div class="main-content">
+
+    <!-- Top bar -->
+    <header class="topbar" id="topbar">
+      <button class="topbar-hamburger" id="hamburger-btn" aria-label="Toggle sidebar">☰</button>
+      <nav class="topbar-breadcrumb" id="topbar-breadcrumb">
+        <span class="bc-home">CICF Pro</span>
+        <span class="bc-sep">/</span>
+        <span class="bc-current" id="bc-current">Dashboard</span>
+      </nav>
+      <div class="topbar-right">
+        <div class="topbar-search-wrap">
+          <span class="ts-icon">⌕</span>
+          <input type="search" id="global-search" placeholder="Search anything…" aria-label="Global search" />
+        </div>
+        <button class="icon-btn" id="notif-btn" title="Notifications" aria-label="Notifications">
+          🔔
+          <span class="notif-badge"></span>
+        </button>
+        <button class="btn-add-project" id="topbar-add-btn">
+          <span>+</span>
+          <span class="btn-label">New Project</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Page container -->
+    <div class="page-container" id="page-container">
+
+      <!-- ── DASHBOARD ───────────────────────────────── -->
+      <section class="page-section active" id="page-dashboard" aria-label="Dashboard overview">
+        <div class="page-header">
+          <div class="page-header-text">
+            <h2>Good morning, Alex 👋</h2>
+            <p>Here's what's happening across your projects today.</p>
+          </div>
+        </div>
+        <div class="stats-grid" id="dash-stats"></div>
+        <div class="dashboard-grid">
+          <div>
+            <div class="section-head">
+              <span class="section-title">Recent Projects</span>
+              <button class="section-meta" id="view-all-projects" style="cursor:pointer;color:var(--text-secondary)">View all →</button>
+            </div>
+            <div class="recent-projects" id="recent-projects"></div>
+          </div>
+          <div>
+            <div class="section-head" style="margin-bottom:14px">
+              <span class="section-title">Activity Feed</span>
+            </div>
+            <div class="activity-card">
+              <div class="activity-feed" id="activity-feed"></div>
+              <div class="quick-stats-row" id="dash-quick-stats"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── PROJECTS ────────────────────────────────── -->
+      <section class="page-section" id="page-projects" aria-label="All projects">
+        <div class="page-header">
+          <div class="page-header-text">
+            <h2>Projects</h2>
+            <p>Track and manage all ongoing client projects.</p>
+          </div>
+          <div class="page-header-actions">
+            <button class="btn-secondary" id="export-btn">↓ Export</button>
+            <button class="btn-primary" id="add-project-btn" style="width:auto;padding:9px 16px;">+ Add Project</button>
+          </div>
+        </div>
+        <div class="controls-bar">
+          <div class="search-box">
+            <span class="s-icon">⌕</span>
+            <input type="search" id="search-input" placeholder="Search by name, client, or tech stack…" aria-label="Search projects" />
+          </div>
+          <div class="filter-group" role="group" aria-label="Filter by status">
+            <button class="fp active" data-filter="All">All</button>
+            <button class="fp" data-filter="In Progress">In Progress</button>
+            <button class="fp" data-filter="Completed">Completed</button>
+            <button class="fp" data-filter="On Hold">On Hold</button>
+          </div>
+          <div class="view-toggle-wrap" role="group" aria-label="View mode">
+            <button class="vt-btn active" data-view="grid" title="Grid view">⊞</button>
+            <button class="vt-btn" data-view="list" title="List view">≡</button>
+          </div>
+        </div>
+        <div class="section-head">
+          <span class="section-title" id="proj-section-title">All Projects</span>
+          <span class="section-meta" id="proj-count">8 projects</span>
+        </div>
+        <div id="projects-grid" role="list" aria-label="Project list"></div>
+      </section>
+
+      <!-- ── CLIENTS ─────────────────────────────────── -->
+      <section class="page-section" id="page-clients" aria-label="Clients">
+        <div class="page-header">
+          <div class="page-header-text">
+            <h2>Clients</h2>
+            <p>An overview of all active clients and their project portfolios.</p>
+          </div>
+        </div>
+        <div class="stats-grid" id="client-stats" style="grid-template-columns:repeat(3,1fr)"></div>
+        <div class="section-head" style="margin-bottom:14px">
+          <span class="section-title">Client Directory</span>
+          <span class="section-meta" id="client-count"></span>
+        </div>
+        <div class="clients-grid" id="clients-grid"></div>
+      </section>
+
+      <!-- ── ANALYTICS ───────────────────────────────── -->
+      <section class="page-section" id="page-analytics" aria-label="Analytics">
+        <div class="page-header">
+          <div class="page-header-text">
+            <h2>Analytics</h2>
+            <p>Project performance metrics and portfolio insights.</p>
+          </div>
+        </div>
+        <div class="stats-grid" id="analytics-stats"></div>
+        <div class="analytics-grid" id="analytics-grid"></div>
+      </section>
+
+      <!-- ── TIMELINE ────────────────────────────────── -->
+      <section class="page-section" id="page-timeline" aria-label="Timeline">
+        <div class="page-header">
+          <div class="page-header-text">
+            <h2>Timeline</h2>
+            <p>Project due dates and delivery schedule overview.</p>
+          </div>
+        </div>
+        <div id="timeline-content"></div>
+      </section>
+
+      <!-- ── SETTINGS ────────────────────────────────── -->
+      <section class="page-section" id="page-settings" aria-label="Settings">
+        <div class="page-header">
+          <div class="page-header-text">
+            <h2>Settings</h2>
+            <p>Manage your account and workspace preferences.</p>
+          </div>
+        </div>
+        <div id="settings-content"></div>
+      </section>
+
+    </div><!-- /page-container -->
+  </div><!-- /main-content -->
+</div><!-- /app-shell -->
+
+<!-- ════════════════════════════════════════
+     PROJECT DETAIL MODAL
+════════════════════════════════════════ -->
+<div id="detail-overlay" class="modal-overlay" role="dialog" aria-modal="true" aria-label="Project details">
+  <div class="modal-box" id="detail-box"></div>
+</div>
+
+<!-- ════════════════════════════════════════
+     ADD / EDIT PROJECT MODAL
+════════════════════════════════════════ -->
+<div id="form-overlay" class="form-overlay" role="dialog" aria-modal="true" aria-label="Add or edit project">
+  <div class="form-box" id="form-box">
+    <div class="form-header">
+      <div>
+        <h3 id="form-title">Add New Project</h3>
+        <p id="form-sub">Fill in the details to create a new project.</p>
+      </div>
+      <button class="modal-close" id="form-close-btn" aria-label="Close form">✕</button>
+    </div>
+    <div class="form-body">
+      <form id="project-form" novalidate>
+        <input type="hidden" id="form-id" value="" />
+        <div class="form-grid">
+          <div class="form-field">
+            <label for="f-name">Project Name *</label>
+            <input type="text" id="f-name" placeholder="e.g. Nexus E-Commerce" required />
+          </div>
+          <div class="form-field">
+            <label for="f-client">Client Name *</label>
+            <input type="text" id="f-client" placeholder="e.g. Nexus Retail Group" required />
+          </div>
+          <div class="form-field">
+            <label for="f-category">Category</label>
+            <select id="f-category">
+              <option value="E-Commerce">E-Commerce</option>
+              <option value="SaaS">SaaS</option>
+              <option value="FinTech">FinTech</option>
+              <option value="Healthcare">Healthcare</option>
+              <option value="EdTech">EdTech</option>
+              <option value="GovTech">GovTech</option>
+              <option value="Logistics">Logistics</option>
+              <option value="Creative">Creative</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+          <div class="form-field">
+            <label for="f-status">Status</label>
+            <select id="f-status">
+              <option value="In Progress">In Progress</option>
+              <option value="Completed">Completed</option>
+              <option value="On Hold">On Hold</option>
+            </select>
+          </div>
+          <div class="form-field">
+            <label for="f-priority">Priority</label>
+            <select id="f-priority">
+              <option value="High">High</option>
+              <option value="Medium">Medium</option>
+              <option value="Low">Low</option>
+            </select>
+          </div>
+          <div class="form-field">
+            <label for="f-progress">Progress (%)</label>
+            <input type="number" id="f-progress" min="0" max="100" placeholder="0–100" />
+          </div>
+          <div class="form-field">
+            <label for="f-due">Due Date *</label>
+            <input type="date" id="f-due" required />
+          </div>
+          <div class="form-field">
+            <label for="f-budget">Budget</label>
+            <input type="text" id="f-budget" placeholder="e.g. $48,000" />
+          </div>
+          <div class="form-field col-full">
+            <label for="f-desc">Description</label>
+            <textarea id="f-desc" placeholder="Brief description of the project scope and goals…"></textarea>
+          </div>
+          <div class="form-field col-full">
+            <label for="f-tech">Tech Stack <span style="font-weight:400;color:var(--text-muted)">(comma-separated)</span></label>
+            <input type="text" id="f-tech" placeholder="e.g. React, Node.js, PostgreSQL" />
+          </div>
+          <div class="form-field col-full">
+            <label for="f-team">Team Members <span style="font-weight:400;color:var(--text-muted)">(Name: Role, comma-separated)</span></label>
+            <input type="text" id="f-team" placeholder="e.g. Sarah Chen: Lead Dev, Tom Alvarez: DevOps" />
+          </div>
+        </div>
+        <div id="form-error" style="color:#dc2626;font-size:13px;margin-top:12px;display:none;"></div>
+      </form>
+    </div>
+    <div class="form-footer">
+      <button class="btn-danger" id="form-delete-btn" style="display:none;margin-right:auto;">Delete Project</button>
+      <button class="btn-secondary" id="form-cancel-btn">Cancel</button>
+      <button class="btn-primary" id="form-save-btn" style="width:auto;padding:9px 18px;">Save Project</button>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════
+     TOAST
+════════════════════════════════════════ -->
+<div class="toast" id="toast" role="status" aria-live="polite">
+  <span class="toast-icon" id="toast-icon">✓</span>
+  <span id="toast-msg"></span>
+</div>
+
+<!-- Scripts -->
+<script src="data/projects.js"></script>
+<script src="scripts/app.js"></script>
+</body>
+</html>
